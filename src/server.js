@@ -1,18 +1,20 @@
+/*
+get -> leitura
+post -> criação
+put -> atualização
+delete -> deleção
+patch -> atualização parcial
+*/
+
 const express = require("express");
 
 const app = express();
+app.use(express.json());
 
-app.get("/message/:id/:user", (req, res) =>{
-    const {id, user} = req.params
 
-    res.send(`id da mensagem: ${id}.Para o usuario ${user}`)
-})
-
-app.get("/users", (req, res) => {
-    const {page, limit} = req.query;
-    
-    res.send(`Página: ${page} . mostrar: ${limit} `);
-
+app.post("/users", (req, res) => {
+    const {name, email, senha } = req.body;
+    res.send(`nome: ${name}; email: ${email}; senha: ${senha}`)
 })
 
 const PORT = 3333;
