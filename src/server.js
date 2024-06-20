@@ -7,15 +7,12 @@ patch -> atualização parcial
 */
 
 const express = require("express");
+const routes = require("./routes")
 
 const app = express();
 app.use(express.json());
 
-
-app.post("/users", (req, res) => {
-    const {name, email, senha } = req.body;
-    res.send(`nome: ${name}; email: ${email}; senha: ${senha}`)
-})
+app.use(routes)
 
 const PORT = 3333;
 
