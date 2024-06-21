@@ -1,15 +1,19 @@
+// aqui é onde são definidas as rotas dos usuários
+
 const {Router} = require("express");
+
+const UserControllers = require('../controllers/UserControllers');
 
 const usersRoutes = Router();
 
-usersRoutes.post('/', (req, res) => {
-    const {name, email, password} = req.body;
-    res.json({name, email, password})
-})
+function myMiddlewere(req, res, next){
+    console.log('você passou pelo middlewere')
 
-app.post("/users", (req, res) => {
-    const {name, email, senha } = req.body;
-    res.send({name, email, senha })
-})
+    next()
+}
 
-module.exports - usersRoutes;
+const userControllers = new UserControllers();
+
+usersRoutes.post('/', myMiddlewere, userControllers.create);
+
+module.exports = usersRoutes;
