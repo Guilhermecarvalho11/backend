@@ -1,4 +1,5 @@
 // aqui é onde são definidas as rotas dos usuários
+// a rota só tem responsobilidade em receber e enviar as informações
 
 const {Router} = require("express");
 

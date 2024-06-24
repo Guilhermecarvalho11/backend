@@ -8,16 +8,16 @@
 
 const AppError = require('../ultils/AppError');
 
-
-class UserControllers {
+// O controller é responsavel em lidar com o processamento das informações
+class UserControllers { 
 
     create(req, res) {
-        const {name, email, password} = req.body;
+        const {name, email, password, team} = req.body;
 
         if(!name){
             throw new AppError('Nome é obrigatorio')
         }
-        res.status(201).json({name, email, password})
+        res.status(201).json({name, email, password, team})
     }
 
 }

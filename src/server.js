@@ -11,7 +11,7 @@ app.use(express.json());
 app.use('/users', routes.usersRoutes); // aqui é onde as rotas estão sendo setadas
 
 app.use((error, req, res, next) => {
-    if(error instanceof AppError){
+    if(error instanceof AppError){ // erro do lado do cliente
         return res.status(error.statusCode).json({
             status: "error",
             message: error.message
@@ -20,7 +20,7 @@ app.use((error, req, res, next) => {
 
     console.log(error)
 
-    return res.status(500).json({
+    return res.status(500).json({ // erro do lado do servidor
         status: "error",
         message: "Internal server Error",
     });
