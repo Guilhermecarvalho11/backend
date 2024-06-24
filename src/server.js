@@ -1,4 +1,5 @@
 require('express-async-errors');
+const db = require('./database/sqlite/index.js')
 
 const AppError = require('./ultils/AppError.js')
 const express = require("express");
@@ -9,6 +10,8 @@ const app = express();
 app.use(express.json());
 
 app.use('/users', routes.usersRoutes); // aqui é onde as rotas estão sendo setadas
+
+db();
 
 app.use((error, req, res, next) => {
     if(error instanceof AppError){ // erro do lado do cliente
