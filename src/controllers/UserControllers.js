@@ -8,7 +8,7 @@
 
 const AppError = require('../ultils/AppError');
 const sqliteConection = require('../database/sqlite');
-const { response } = require('express');
+const {hash} = require('bcryptjs');
 
 // O controller é responsavel em lidar com o processamento das informações
 class UserControllers { 
@@ -17,18 +17,19 @@ class UserControllers {
      const {name, email, password, team} = req.body;
 
      const database = await sqliteConection();
-     const checkUserExists = await database.get("SELECT * FROM users WHERE email = (?)", [email])
+     const checkUserExists = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
 
       if(checkUserExists){
-        throw new AppError("este email ja está cadastrado")
+        throw new AppError("este email ja está cadastrado");
       }
 
-      await database.run("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, password])
+      const hashedPassword = await hash(password, 8);
 
-      return response.status(201).json();
+      await database.run("INSERT INTO users (name, email, password, team) VALUES (?, ?, ?, ?)", [name, email, hashedPassword, team]);
+
+      return res.status(201).json();
 
     }
-
 }
 
 module.exports = UserControllers;
