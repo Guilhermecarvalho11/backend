@@ -4,7 +4,7 @@ const path = require('path');
 
 async function sqliteConnection() {
     const database = await sqlite.open({
-        filename: path.resolve(__dirname, "..", "database.db"), // onde vou salvar o arquivo vai ficar salvo
+        filename: path.resolve(__dirname, "..", "database.db"), // onde vou salvar o arquivo do banco de dados
         driver: sqlite3.Database
     });
 

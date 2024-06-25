@@ -1,17 +1,17 @@
 require('express-async-errors');
-const db = require('./database/sqlite/index.js')
+const migrationsRun = require('./database/sqlite/migrations')
 
 const AppError = require('./ultils/AppError.js')
 const express = require("express");
 
 const routes = require("./routes");
 
+migrationsRun();
+
 const app = express();
 app.use(express.json());
 
 app.use('/users', routes.usersRoutes); // aqui é onde as rotas estão sendo setadas
-
-db();
 
 app.use((error, req, res, next) => {
     if(error instanceof AppError){ // erro do lado do cliente
@@ -28,7 +28,7 @@ app.use((error, req, res, next) => {
         message: "Internal server Error",
     });
 });
-
+ 
 const PORT = 3333;
 
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
