@@ -8,7 +8,8 @@
 
 const AppError = require('../ultils/AppError');
 const sqliteConection = require('../database/sqlite');
-const {hash} = require('bcryptjs');
+const {hash, compare} = require('bcryptjs');
+const { use } = require('express/lib/router');
 
 // O controller é responsavel em lidar com o processamento das informações
 class UserControllers { 
@@ -32,7 +33,7 @@ class UserControllers {
     }
 
     async update(req, res){
-        const {name, email} = req.body;
+        const {name, email, password, old_password} = req.body;
         const {id} = req.params;
         console.log('id',id)
 
@@ -52,8 +53,27 @@ class UserControllers {
         users.name = name;
         users.email = email;
 
-        await database.run(`UPDATE users SET name = ?, email = ?, update_at = ? WHERE id = ?`,
-            [users.name, users.email, new Date(), id]
+        if(password && !old_password){
+            throw new AppError('Informe a senha antiga')
+        }
+
+        if(password && old_password){
+            const checkOldPassword = await compare(old_password, users.password);
+
+            if(!checkOldPassword){
+                throw new AppError("A senha antiga não confere")
+            }
+
+            users.password = await hash(password, 8)
+        }
+
+        await database.run(`
+            UPDATE users SET name = ?,
+            email = ?,
+            password = ?,
+            update_at = ?
+            WHERE id = ?`,
+            [users.name, users.email, users.password, new Date(), id]
         )
 
         return res.status(200).json();
