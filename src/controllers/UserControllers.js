@@ -50,8 +50,8 @@ class UserControllers {
             throw new AppError("Este email já existe");
         }
 
-        users.name = name;
-        users.email = email;
+        users.name = name ?? users.name;
+        users.email = email ?? users.email;
 
         if(password && !old_password){
             throw new AppError('Informe a senha antiga')
@@ -71,9 +71,9 @@ class UserControllers {
             UPDATE users SET name = ?,
             email = ?,
             password = ?,
-            update_at = ?
+            update_at = DATETIME('now')
             WHERE id = ?`,
-            [users.name, users.email, users.password, new Date(), id]
+            [users.name, users.email, users.password, id]
         )
 
         return res.status(200).json();
