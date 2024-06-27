@@ -7,16 +7,9 @@ const NotesControllers = require('../controllers/NotesControllers');
 
 const notesRoutes = Router();
 
-function myMiddlewere(req, res, next){
-    console.log('você passou pelo middlewere')
-
-    next()
-}
-
 const notesControllers = new NotesControllers();
 
-notesRoutes.post('/:users_id',  myMiddlewere, notesControllers.create);
-notesRoutes.get('/:id',  myMiddlewere, notesControllers.show);
-
+notesRoutes.post('/:users_id', notesControllers.create);
+notesRoutes.get('/:id', notesControllers.show);
 
 module.exports = notesRoutes;

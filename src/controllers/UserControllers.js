@@ -9,7 +9,6 @@
 const AppError = require('../ultils/AppError');
 const sqliteConection = require('../database/sqlite');
 const {hash, compare} = require('bcryptjs');
-const { use } = require('express/lib/router');
 
 // O controller é responsavel em lidar com o processamento das informações
 class UserControllers { 
