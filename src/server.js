@@ -11,7 +11,7 @@ migrationsRun();
 const app = express();
 app.use(express.json());
 
-app.use('/users', routes.usersRoutes); // aqui é onde as rotas estão sendo setadas
+app.use(routes); // aqui é onde as rotas estão sendo setadas
 
 app.use((error, req, res, next) => {
     if(error instanceof AppError){ // erro do lado do cliente
