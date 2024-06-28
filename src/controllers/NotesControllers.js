@@ -52,9 +52,35 @@ class NotesController {
 
         await knex('notes').where({id}).delete();
 
-        await knex('notes').where({id}).delete();
-
         return res.json();
+    }
+
+    async index(req, res){
+        const {title, users_id, tags} = req.query;
+
+        let notes
+
+        if(tags){
+            const filterTags = tags.split(',').map(tag => tag.trim());
+
+            notes = await knex('tags')
+            .select([
+                'notes.id',
+                'notes.title',
+                'notes.users_id',
+            ])
+            .where('notes.users_id', users_id)
+            .whereLike("notes.title", `%${title}%`)
+            .whereIn('name', filterTags)
+            .innerJoin('notes', 'notes.id', 'tags.note_id')
+            .orderBy('notes.title')
+        }else{
+            notes = await knex('notes')
+            .where({users_id})
+            .whereLike('title', `%${title}%`)
+            .orderBy('title')
+        }
+        return res.json(notes)
     }
 }
 
