@@ -14,7 +14,7 @@ class SessionsController {
       throw new AppError("Email ou senha inválida", 401);
     }
 
-    const passwordMatched = await compare(password, user.password); // comparando senha informada com a senha cadastrada no BD
+    const passwordMatched = await compare(password, user.password); // comparando senha cadastrada com a senha informada no BD
 
     if (!passwordMatched) {
       throw new AppError("Email ou senha inválida", 401);
