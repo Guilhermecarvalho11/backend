@@ -18,6 +18,7 @@ function ensureAuthenticated(req, res, next) {
     req.user = {
       id: Number(user_id),
     };
+    console.log(req.user);
 
     return next();
   } catch {
