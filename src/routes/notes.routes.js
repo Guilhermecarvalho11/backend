@@ -11,7 +11,7 @@ notesRoutes.use(ensureAuthenticated);
 
 const notesControllers = new NotesControllers();
 
-notesRoutes.get("/", notesControllers.index);
+notesRoutes.get("/", ensureAuthenticated, notesControllers.index);
 notesRoutes.post("/", notesControllers.create);
 notesRoutes.get("/:id", notesControllers.show);
 notesRoutes.delete("/:id", notesControllers.delete);
