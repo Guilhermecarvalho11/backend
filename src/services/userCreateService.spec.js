@@ -1,18 +1,45 @@
 const UserCreateServices = require("./userCreateService");
 const UserCreateServicesInMemory = require("../repositories/UserRepositoryInMemory");
+const AppError = require("../ultils/AppError");
 
-it("user should be create", async () => {
-  const user = {
-    name: "User test",
-    email: "user@test.com",
-    password: "123",
-  };
+describe("UserCreateServices", () => {
+  let userRepository = null;
+  let userCreateService = null;
 
-  const userRepositoryInMemory = new UserCreateServicesInMemory();
-  const userCreateService = new UserCreateServices(userRepositoryInMemory);
-  const userCreated = await userCreateService.execute(user);
+  beforeEach(() => {
+    userRepository = new UserCreateServicesInMemory();
+    userCreateService = new UserCreateServices(userRepository);
+  });
 
-  console.log(userCreated);
+  it("user should be create", async () => {
+    const user = {
+      name: "User test",
+      email: "user@test.com",
+      password: "123",
+    };
+    const userCreated = await userCreateService.execute(user);
 
-  expect(userCreated).toHaveProperty("id");
+    console.log(userCreated);
+
+    expect(userCreated).toHaveProperty("id");
+  });
+
+  it("user not should be create with exists email", async () => {
+    const user1 = {
+      name: "user test 1",
+      email: "user@teste.com",
+      password: "123",
+    };
+
+    const user2 = {
+      name: "user test 2",
+      email: "user@teste.com",
+      password: "456",
+    };
+
+    await userCreateService.execute(user1);
+    await expect(userCreateService.execute(user2)).rejects.toEqual(
+      new AppError("este email ja está cadastrado")
+    );
+  });
 });
