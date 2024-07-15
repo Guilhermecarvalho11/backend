@@ -1,4 +1,6 @@
 //aqui apenas a regra de negocio da aplicação
+const { hash } = require("bcryptjs");
+const AppError = require("../ultils/AppError");
 class UserCreateServices {
   constructor(userRepository) {
     this.userRepository = userRepository;
@@ -12,7 +14,13 @@ class UserCreateServices {
 
     const hashedPassword = await hash(password, 8);
 
-    await this.userRepository.create({ name, email, password: hashedPassword });
+    const userCreated = await this.userRepository.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    return userCreated;
   }
 }
 
