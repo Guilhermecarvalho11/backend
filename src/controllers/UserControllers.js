@@ -6,31 +6,20 @@
  * delete - DELETE para remover um registro
  */
 
-const AppError = require("../ultils/AppError");
-const sqliteConection = require("../database/sqlite");
 const { hash, compare } = require("bcryptjs");
+const AppError = require("../ultils/AppError");
+
+const UserRepository = require("../repositories/UserRepository");
+const sqliteConection = require("../database/sqlite");
+const UserCreateServices = require("../services/userCreateService");
 
 // O controller é responsavel em lidar com o processamento das informações
 class UserControllers {
   async create(req, res) {
-    const { name, email, password, team } = req.body;
-
-    const database = await sqliteConection();
-    const checkUserExists = await database.get(
-      "SELECT * FROM users WHERE email = (?)",
-      [email]
-    );
-
-    if (checkUserExists) {
-      throw new AppError("este email ja está cadastrado");
-    }
-
-    const hashedPassword = await hash(password, 8);
-
-    await database.run(
-      "INSERT INTO users (name, email, password, team) VALUES (?, ?, ?, ?)",
-      [name, email, hashedPassword, team]
-    );
+    const { name, email, password } = req.body;
+    const userRepository = new UserRepository();
+    const userCreateService = new UserCreateServices(userRepository);
+    await userCreateService.execute({ name, email, password });
 
     return res.status(201).json();
   }
