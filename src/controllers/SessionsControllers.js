@@ -7,6 +7,7 @@ const { sign } = require("jsonwebtoken");
 class SessionsController {
   async create(req, res) {
     const { email, password } = req.body;
+    console.log("email: ", email, "password: ", password);
 
     const user = await knex("users").where({ email }).first(); //buscando emails da pasta users no BD
 

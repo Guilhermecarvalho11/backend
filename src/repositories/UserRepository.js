@@ -1,9 +1,10 @@
 //aqui fica apenas a logica do banco de dados
-const sqliteConection = require("../database/sqlite");
+const sqliteConnection = require("../database/sqlite");
 
 class UserRepository {
   async findByEmail(email) {
-    const database = await sqliteConection();
+    const database = await sqliteConnection();
+
     const user = await database.get("SELECT * FROM users WHERE email = (?)", [
       email,
     ]);
@@ -12,7 +13,7 @@ class UserRepository {
   }
 
   async create({ name, email, password }) {
-    const database = await sqliteConection();
+    const database = await sqliteConnection();
     const userId = database.run(
       "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
       [name, email, password]
